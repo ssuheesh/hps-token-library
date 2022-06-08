@@ -30,7 +30,7 @@ public class WebViewActivity extends AppCompatActivity {
     }
 }
 
-public class WebAppInterface {
+class WebAppInterface {
     Context mContext;
 
     /** Instantiate the interface and set the context */
@@ -41,6 +41,6 @@ public class WebAppInterface {
     /** Show a toast from the web page */
     @JavascriptInterface
     public void processCard(String value) {
-        ToasterMessage.show(mContext, value)
+        ToasterMessage.show(mContext, value);
     }
 }
