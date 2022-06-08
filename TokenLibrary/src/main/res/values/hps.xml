@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="hps_entityid">TEST_ENTITYID</string>
+<string name="hps_token">TEST_TOKEN</string>
+<string name="hps_code">TEST_CODE</string>
+</resources>

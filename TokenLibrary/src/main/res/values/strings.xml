@@ -1,0 +1,4 @@
+<resources>
+    <string name="str_card_add">Карт нэмэх</string>
+    <string name="str_card_delete">Карт хасах</string>
+</resources>
