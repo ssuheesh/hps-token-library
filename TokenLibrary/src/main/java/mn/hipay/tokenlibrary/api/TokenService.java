@@ -81,20 +81,15 @@ public class TokenService {
         functionCall(api.cardInit(token, obj), callback);
     }
 
-    public void cardAdd(String cardInitId, TokenCallbackInterface callback) {
-        functionCall(api.cardAdd(cardInitId), callback);
+//    public void cardAdd(String cardInitId, TokenCallbackInterface callback) {
+//        functionCall(api.cardAdd(cardInitId), callback);
+//    }
+
+    public void cardList(String token, String customerId, TokenCallbackInterface callback) {
+        functionCall(api.cardList(token, customerId), callback);
     }
-//
-//    public void clearTrash(String token, JsonObject obj, MonitoringCallbackInterface callback) {
-//        functionCall( api.clearTrash(token, obj), callback);
-//    }
-//
-//    public void deviceFirstRegister(String token, JsonObject obj, MonitoringCallbackInterface callback) {
-//        System.out.println(obj.toString());
-//        functionCall( api.deviceFirstRegister(token, obj), callback);
-//    }
-//
-//    public void barcode(String barcode, String deviceCode, MonitoringCallbackInterface callback) {
-//        functionCall(api.barcode(barcode, deviceCode), callback);
-//    }
+
+    public void cardRemove(String token, String cardId, TokenCallbackInterface callback) {
+        functionCall(api.cardRemove(token, cardId), callback);
+    }
 }

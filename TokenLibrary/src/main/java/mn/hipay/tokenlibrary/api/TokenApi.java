@@ -19,4 +19,10 @@ public interface TokenApi {
 
     @GET("/v2/card/form/{cardInitId}")
     Call<JsonObject> cardAdd(@Path("cardInitId") String cardInitId);
+
+    @GET("/v2/card/list/{customerId}")
+    Call<JsonObject> cardList(@Header("Authorization") String token, @Path("customerId") String customerId);
+
+    @POST("/v2/card/remove/{cardId}")
+    Call<JsonObject> cardRemove(@Header("Authorization") String token, @Path("cardId") String cardId);
 }

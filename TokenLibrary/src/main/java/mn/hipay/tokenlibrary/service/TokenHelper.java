@@ -31,10 +31,8 @@ public class TokenHelper {
         obj.addProperty("entityId", hps_entityid);
         tokenService.cardInit(accessToken, obj, callback);
     }
-
-    public static void cardAdd(String cardInitId, TokenCallbackInterface callback) {
-//        tokenService.cardAdd(cardInitId, callback);
-
+    public static void cardList(String accessToken, String customerId, TokenCallbackInterface callback) {
+        tokenService.cardList(accessToken,customerId, callback);
     }
 //
 //    public static void checkCheckout(TokenCallbackInterface callback) {
