@@ -1,15 +1,16 @@
 package mn.hipay.tokenlibrary.service;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.webkit.WebView;
+import android.util.Log;
 
 import com.google.gson.JsonObject;
 
-import mn.hipay.tokenlibrary.R;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+
 import mn.hipay.tokenlibrary.api.TokenCallbackInterface;
-import mn.hipay.tokenlibrary.api.TokenResult;
 import mn.hipay.tokenlibrary.api.TokenService;
+import mn.hipay.tokenlibrary.model.CardData;
 
 public class TokenHelper {
     public static SharedPreferences preferences;
@@ -33,6 +34,35 @@ public class TokenHelper {
     }
     public static void cardList(String accessToken, String customerId, TokenCallbackInterface callback) {
         tokenService.cardList(accessToken,customerId, callback);
+    }
+
+    public static boolean cardRemoveFull(CardData cardData) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("redirect_uri","https://test.hipay.mn/cardverify/result");
+        AtomicReference<String> accessToken = new AtomicReference<>("");
+        AtomicBoolean resultVal = new AtomicBoolean(false);
+        accessTokenCreation(obj, result -> {
+            Log.i("TOKEN ACCESSTOKEN", "result: " + result);
+            if(result.has("code") && result.get("code").getAsInt() == 1){
+                accessToken.set(result.get("access_token").getAsString());
+            } else {
+                accessToken.set("");
+                Log.e("TOKEN ACCESSTOKEN ERROR", "result: " + result);
+            }
+            Log.i("TOKEN ACCESSTOKEN", accessToken.get());
+            if(accessToken.get().length() != 0) {
+                tokenService.cardRemove("Bearer "+ accessToken, cardData.cardId, result2 -> {
+                    Log.i("TOKEN CARDREMOVE", "result: " + result2);
+                    if(result2.has("code") && result2.get("code").getAsInt() == 1){
+                        resultVal.set(true);
+                    } else {
+                        resultVal.set(false);
+                        Log.e("TOKEN CARDREMOVE ERROR", "result: " + result2);
+                    }
+                });
+            }
+        });
+        return resultVal.get();
     }
 //
 //    public static void checkCheckout(TokenCallbackInterface callback) {

@@ -9,6 +9,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -66,6 +67,7 @@ public class TokenMainActivity extends AppCompatActivity {
                             adbCardData[0] = new AdapterCardData (TokenMainActivity.this, 0, myListItems);
                             ListView listView = (ListView) findViewById(R.id.cardList);
                             listView.setAdapter(adbCardData[0]);
+                            adbCardData[0].notifyDataSetChanged();
                         }
                     } else {
                         Log.e("TOKEN CARDLIST ERROR:", "result: " + result2);
@@ -111,10 +113,6 @@ public class TokenMainActivity extends AppCompatActivity {
                 });
             }
         });
-
-
-
-
     }
 
 }

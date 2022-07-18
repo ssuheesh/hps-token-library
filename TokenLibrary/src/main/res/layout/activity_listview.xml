@@ -18,4 +18,12 @@
         android:layout_alignLeft="@+id/display_name"
         android:layout_below="@+id/display_name"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+    <Button
+        android:id="@+id/hps_button_remove"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/display_number"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="хасах"
+        />
 </RelativeLayout>

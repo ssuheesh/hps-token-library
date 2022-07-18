@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import mn.hipay.tokenlibrary.R;
+import mn.hipay.tokenlibrary.TokenMainActivity;
+import mn.hipay.tokenlibrary.service.TokenHelper;
 
 public class AdapterCardData extends ArrayAdapter<CardData> {
     private Activity activity;
@@ -56,8 +58,6 @@ public class AdapterCardData extends ArrayAdapter<CardData> {
             } else {
                 holder = (ViewHolder) vi.getTag();
             }
-
-
 
             holder.display_name.setText(lCardData.get(position).tokenId);
             holder.display_number.setText(lCardData.get(position).expiryMonth);
