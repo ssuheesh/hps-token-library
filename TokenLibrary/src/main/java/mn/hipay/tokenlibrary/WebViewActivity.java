@@ -115,7 +115,14 @@ class WebAppInterface {
 
     /** Show a toast from the web page */
     @JavascriptInterface
-    public void processCard(String msg) {
+    public void processCard(String result, String msg) {
+        Log.i("TOKEN CARDADD RESULT", msg);
+        ToasterMessage.show(mContext, msg);
+        ((Activity) mContext).finish();
+    }
+    /** Show a toast from the web page */
+    @JavascriptInterface
+    public void postMessage(String msg) {
         Log.i("TOKEN CARDADD RESULT", msg);
         ToasterMessage.show(mContext, msg);
         ((Activity) mContext).finish();

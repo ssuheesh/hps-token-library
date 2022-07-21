@@ -24,6 +24,8 @@ import mn.hipay.tokenlibrary.service.TokenHelper;
 public class TokenMainActivity extends AppCompatActivity {
     public static String accessToken = "";
     public static String initId = "";
+    public TokenHelper tokenHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +40,14 @@ public class TokenMainActivity extends AppCompatActivity {
 //
 //        ListView listView = (ListView) findViewById(R.id.cardList);
 //        listView.setAdapter(adapter);
+        this.tokenHelper = new TokenHelper(this);
         Gson gson = new Gson();
         final AdapterCardData[] adbCardData = new AdapterCardData[1];
         ArrayList<CardData> myListItems  = new ArrayList<>();
 
         JsonObject obj = new JsonObject();
         obj.addProperty("redirect_uri","https://test.hipay.mn/cardverify/result");
-        TokenHelper.accessTokenCreation(obj, result -> {
+        this.tokenHelper.accessTokenCreation(obj, result -> {
             Log.i("TOKEN ACCESSTOKEN", "result: " + result);
             if(result.has("code") && result.get("code").getAsInt() == 1){
                 accessToken = result.get("access_token").getAsString();
@@ -55,7 +58,7 @@ public class TokenMainActivity extends AppCompatActivity {
             Log.i("TOKEN ACCESSTOKEN", accessToken);
             if(accessToken.length() != 0) {
                 JsonObject obj2 = new JsonObject();
-                TokenHelper.cardList("Bearer "+ accessToken, "TEST_TOKEN_CUSTOMERID", result2 -> {
+                this.tokenHelper.cardList("Bearer "+ accessToken, "TEST_TOKEN_CUSTOMERID", result2 -> {
                     Log.i("TOKEN CARDLIST", "result: " + result2);
                     if(result2.has("code") && result2.get("code").getAsInt() == 1){
                         if(result2.has("cards")){
@@ -82,7 +85,7 @@ public class TokenMainActivity extends AppCompatActivity {
         JsonObject obj = new JsonObject();
         obj.addProperty("redirect_uri","https://test.hipay.mn/cardverify/result");
 
-        TokenHelper.accessTokenCreation(obj, result -> {
+        this.tokenHelper.accessTokenCreation(obj, result -> {
             Log.i("TOKEN ACCESSTOKEN", "result: " + result);
             if(result.has("code") && result.get("code").getAsInt() == 1){
                 accessToken = result.get("access_token").getAsString();
@@ -93,10 +96,10 @@ public class TokenMainActivity extends AppCompatActivity {
             Log.i("TOKEN ACCESSTOKEN", accessToken);
             if(accessToken.length() != 0) {
                 JsonObject obj2 = new JsonObject();
-                obj2.addProperty("redirect_uri", "https://test.hipay.mn/chp/cardverify/result");
+                obj2.addProperty("redirect_uri", "https://test.hipay.mn/cardverify/result");
                 obj2.addProperty("return_uri", "HPSSDK.processCardBack()");
                 obj2.addProperty("customer_id", "TEST_TOKEN_CUSTOMERID");
-                TokenHelper.cardInit("Bearer "+ accessToken, obj2, result2 -> {
+                this.tokenHelper.cardInit("Bearer "+ accessToken, obj2, result2 -> {
                     Log.i("TOKEN CARDINIT", "result: " + result2);
                     if(result2.has("code") && result2.get("code").getAsInt() == 1){
                         initId = result2.get("initId").getAsString();

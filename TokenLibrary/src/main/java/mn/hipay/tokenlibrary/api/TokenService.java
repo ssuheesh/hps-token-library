@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 import android.util.Log;
 import com.google.gson.JsonObject;
 
+import mn.hipay.tokenlibrary.exception.HpsException;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,18 +46,30 @@ public class TokenService {
                         obj.addProperty("isSuccess", false);
                         obj.addProperty("code", "401");
                         obj.addProperty("msg", "401 Серверт хандах эрх хаалттай");
-                        callback.response(obj);
+                        try {
+                            callback.response(obj);
+                        } catch (HpsException e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         JsonObject dr = response.body();
                         if(dr != null) {
 //                            Log.i("TOKEN RESULT: ", dr.toString());
-                            callback.response(dr);
+                            try {
+                                callback.response(dr);
+                            } catch (HpsException e) {
+                                e.printStackTrace();
+                            }
                         } else {
                             JsonObject obj = new JsonObject();
                             obj.addProperty("isSuccess", false);
                             obj.addProperty("code", "500");
                             obj.addProperty("msg", "500 Сервер унтарсан байна.");
-                            callback.response(obj);
+                            try {
+                                callback.response(obj);
+                            } catch (HpsException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -67,7 +80,11 @@ public class TokenService {
                 if (callback != null) {
                     JsonObject obj = new JsonObject();
                     obj.addProperty("msg", "Алдаа: 401 Серверт хандах эрх хаалттай");
-                    callback.response(obj);
+                    try {
+                        callback.response(obj);
+                    } catch (HpsException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
