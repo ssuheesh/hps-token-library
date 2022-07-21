@@ -2,6 +2,7 @@ package mn.hipay.tokenlibrary.model;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 
 import mn.hipay.tokenlibrary.R;
 import mn.hipay.tokenlibrary.TokenMainActivity;
+import mn.hipay.tokenlibrary.callback.CardRemoveListenerCallback;
+import mn.hipay.tokenlibrary.callback.Worker;
 import mn.hipay.tokenlibrary.service.TokenHelper;
 
 public class AdapterCardData extends ArrayAdapter<CardData> {
@@ -52,8 +55,6 @@ public class AdapterCardData extends ArrayAdapter<CardData> {
 
                 holder.display_name = (TextView) vi.findViewById(R.id.display_name);
                 holder.display_number = (TextView) vi.findViewById(R.id.display_number);
-
-
                 vi.setTag(holder);
             } else {
                 holder = (ViewHolder) vi.getTag();
@@ -61,8 +62,29 @@ public class AdapterCardData extends ArrayAdapter<CardData> {
 
             holder.display_name.setText(lCardData.get(position).tokenId);
             holder.display_number.setText(lCardData.get(position).expiryMonth);
-        } catch (Exception e) {
 
+            vi.findViewById(R.id.hps_button_remove).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Worker worker = new Worker(getContext());
+                            worker.setCardRemoveListener(lCardData.get(position), new CardRemoveListenerCallback() {
+                                @Override
+                                public void onSuccess(String successMessage) {
+                                    Log.i("CARD_REMOVE_SUCCESS", successMessage);
+                                    System.out.println("The event has been triggered successfully");
+                                }
+
+                                @Override
+                                public void onFailure(Throwable error) {
+                                    System.err.println("Error: " + error.getMessage());
+                                }
+                            });
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
         }
         return vi;
     }
