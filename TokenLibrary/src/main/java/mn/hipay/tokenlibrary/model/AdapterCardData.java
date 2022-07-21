@@ -12,10 +12,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import mn.hipay.tokenlibrary.R;
-import mn.hipay.tokenlibrary.TokenMainActivity;
-import mn.hipay.tokenlibrary.callback.CardRemoveListenerCallback;
+import mn.hipay.tokenlibrary.callback.CardListenerCallback;
 import mn.hipay.tokenlibrary.callback.Worker;
-import mn.hipay.tokenlibrary.service.TokenHelper;
 
 public class AdapterCardData extends ArrayAdapter<CardData> {
     private Activity activity;
@@ -68,7 +66,7 @@ public class AdapterCardData extends ArrayAdapter<CardData> {
                         @Override
                         public void onClick(View view) {
                             Worker worker = new Worker(getContext());
-                            worker.setCardRemoveListener(lCardData.get(position), new CardRemoveListenerCallback() {
+                            worker.setCardRemoveListener(lCardData.get(position), new CardListenerCallback() {
                                 @Override
                                 public void onSuccess(String successMessage) {
                                     Log.i("CARD_REMOVE_SUCCESS", successMessage);

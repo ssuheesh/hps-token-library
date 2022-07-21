@@ -53,34 +53,6 @@ public class TokenHelper  {
         tokenService.cardList(accessToken,customerId, callback);
     }
 
-    public void cardRemoveFull(CardData cardData) {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("redirect_uri","https://test.hipay.mn/cardverify/result");
-        this.accessTokenCreation(obj, result -> {
-            String accessToken = "";
-            Log.i("TOKEN ACCESSTOKEN", "result: " + result);
-            if(result.has("code") && result.get("code").getAsInt() == 1){
-                accessToken = result.get("access_token").getAsString();
-            } else {
-                accessToken = "";
-                Log.e("TOKEN ACCESSTOKEN ERROR", "result: " + result);
-//                throw new HpsException(HpsException.ACCESS_TOKEN_EXCEPTION,"Failed to create access_token: " + result);
-            }
-            Log.i("TOKEN ACCESSTOKEN", accessToken);
-            if(accessToken.length() != 0) {
-                tokenService.cardRemove("Bearer "+ accessToken, cardData.cardId, result2 -> {
-                    Log.i("TOKEN CARDREMOVE", "result: " + result2);
-                    if(result2.has("code") && result2.get("code").getAsInt() == 1){
-                        Log.i("TOKEN CARDREMOVE SUCCES", "result: " + result2);
-                    } else {
-                        Log.e("TOKEN CARDREMOVE ERROR", "result: " + result2);
-//                        throw new HpsException(HpsException.CARD_REMOVE_EXCEPTION,"Failed to remove a card: " + result2);
-                    }
-                });
-            }
-        });
-    }
-
     public void cardAdd() {
         Log.i("TOKEN", "CARD ADD STARTED!");
         JsonObject obj = new JsonObject();

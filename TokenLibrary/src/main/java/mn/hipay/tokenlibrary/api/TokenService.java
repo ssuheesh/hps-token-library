@@ -17,7 +17,7 @@ public class TokenService {
     String url;
     int code;
     TokenApi api;
-    private static String baseUrl = "https://test.hipay.mn";
+    private static final String baseUrl = "https://test.hipay.mn";
 
     public TokenService() {
         url = baseUrl;

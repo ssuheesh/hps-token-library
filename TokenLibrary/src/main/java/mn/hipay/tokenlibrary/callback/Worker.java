@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 
-import mn.hipay.tokenlibrary.TokenMainActivity;
 import mn.hipay.tokenlibrary.api.TokenService;
 import mn.hipay.tokenlibrary.exception.HpsException;
 import mn.hipay.tokenlibrary.model.CardData;
@@ -13,7 +12,8 @@ import mn.hipay.tokenlibrary.service.TokenHelper;
 
 public class Worker {
 
-    CardRemoveListenerCallback  callBack;
+    public static final String baseVerifyUrl = "https://test.hipay.mn/cardverify/result";
+    CardListenerCallback callBack;
     TokenHelper tokenHelper;
     Context context;
     TokenService tokenService;
@@ -26,10 +26,10 @@ public class Worker {
         this.tokenService = new TokenService();
     }
 
-    public void setCardRemoveListener(CardData cardData, CardRemoveListenerCallback  callBack) {
+    public void setCardRemoveListener(CardData cardData, CardListenerCallback callBack) {
         this.callBack = callBack;
         JsonObject obj = new JsonObject();
-        obj.addProperty("redirect_uri","https://test.hipay.mn/cardverify/result");
+        obj.addProperty("redirect_uri",baseVerifyUrl);
         this.tokenHelper.accessTokenCreation(obj, result -> {
             String accessToken = "";
             Log.i("TOKEN ACCESSTOKEN", "result: " + result);
@@ -68,5 +68,39 @@ public class Worker {
         else {
             callBack.onFailure(throwableError);
         }
+    }
+
+    public void setCardAddListener(String customerId, CardListenerCallback  callBack) {
+        this.callBack = callBack;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("redirect_uri",baseVerifyUrl);
+
+        this.tokenService.accessTokenCreation(obj, result -> {
+            Log.i("TOKEN ACCESSTOKEN", "result: " + result);
+            String accessToken = "";
+            if(result.has("code") && result.get("code").getAsInt() == 1){
+                accessToken = result.get("access_token").getAsString();
+            } else {
+                accessToken = "";
+                Log.e("TOKEN ACCESSTOKEN ERROR", "result: " + result);
+            }
+            Log.i("TOKEN ACCESSTOKEN", accessToken);
+            if(accessToken.length() != 0) {
+                JsonObject obj2 = new JsonObject();
+                obj2.addProperty("redirect_uri", baseVerifyUrl);
+                obj2.addProperty("return_uri", "HPSSDK.processCardBack()");
+                obj2.addProperty("customer_id", customerId);
+                this.tokenService.cardInit("Bearer "+ accessToken, obj2, result2 -> {
+                    String initId;
+                    Log.i("TOKEN CARDINIT", "result: " + result2);
+                    if(result2.has("code") && result2.get("code").getAsInt() == 1){
+                        initId = result2.get("initId").getAsString();
+                    } else {
+                        initId = "";
+                        Log.e("TOKEN CARDINIT ERROR:", "result: " + result2);
+                    }
+                });
+            }
+        });
     }
 }

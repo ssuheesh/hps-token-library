@@ -1,6 +1,6 @@
 package mn.hipay.tokenlibrary.callback;
 
-public interface CardRemoveListenerCallback
+public interface CardAddListenerCallback
 {
     public void onSuccess(String successMessage);
     public void onFailure(Throwable throwableError);
