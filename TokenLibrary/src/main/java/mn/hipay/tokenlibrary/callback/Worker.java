@@ -67,7 +67,7 @@ public class Worker {
         JsonObject obj = new JsonObject();
         obj.addProperty("redirect_uri",baseVerifyUrl);
 
-        this.tokenService.accessTokenCreation(obj, result -> {
+        this.tokenHelper.accessTokenCreation(obj, result -> {
             Log.i("TOKEN ACCESSTOKEN", "result: " + result);
             String accessToken = "";
             if(result.has("code") && result.get("code").getAsInt() == 1){
@@ -83,7 +83,7 @@ public class Worker {
                 obj2.addProperty("redirect_uri", baseVerifyUrl);
                 obj2.addProperty("return_uri", "HPSSDK.processCardBack()");
                 obj2.addProperty("customer_id", customerId);
-                this.tokenService.cardInit("Bearer "+ accessToken, obj2, result2 -> {
+                this.tokenHelper.cardInit("Bearer "+ accessToken, obj2, result2 -> {
                     String initId;
                     Log.i("TOKEN CARDINIT", "result: " + result2);
                     if(result2.has("code") && result2.get("code").getAsInt() == 1){
