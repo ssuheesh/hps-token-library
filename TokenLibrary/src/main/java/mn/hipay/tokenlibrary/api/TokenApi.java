@@ -25,4 +25,16 @@ public interface TokenApi {
 
     @POST("/v2/card/remove/{cardId}")
     Call<JsonObject> cardRemove(@Header("Authorization") String token, @Path("cardId") String cardId);
+
+    @POST("/checkout")
+    Call<JsonObject> createCheckout(@Header("Authorization") String merchantToken, @Body JsonObject json);
+
+    @GET("/checkout/get/{checkoutId}")
+    Call<JsonObject> checkCheckout(@Header("Authorization") String merchantToken, @Path("checkoutId") String checkoutId);
+
+    @POST("/v2/payment")
+    Call<JsonObject> doPayment(@Header("Authorization") String merchantToken, @Body JsonObject json);
+
+    @GET("/payment/get/{paymentId}")
+    Call<JsonObject> checkPayment(@Header("Authorization") String merchantToken, @Path("paymentId") String paymentId, @Query("entityId") String entityId);
 }

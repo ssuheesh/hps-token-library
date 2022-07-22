@@ -53,48 +53,19 @@ public class TokenHelper  {
         tokenService.cardList(accessToken,customerId, callback);
     }
 
-    public void cardAdd() {
-        Log.i("TOKEN", "CARD ADD STARTED!");
-        JsonObject obj = new JsonObject();
-        obj.addProperty("redirect_uri","https://test.hipay.mn/cardverify/result");
-
-        this.accessTokenCreation(obj, result -> {
-            Log.i("TOKEN ACCESSTOKEN", "result: " + result);
-            String accessToken = "";
-            if(result.has("code") && result.get("code").getAsInt() == 1){
-                accessToken = result.get("access_token").getAsString();
-            } else {
-                accessToken = "";
-                Log.e("TOKEN ACCESSTOKEN ERROR", "result: " + result);
-            }
-            Log.i("TOKEN ACCESSTOKEN", accessToken);
-            if(accessToken.length() != 0) {
-                JsonObject obj2 = new JsonObject();
-                obj2.addProperty("redirect_uri", "https://test.hipay.mn/cardverify/result");
-                obj2.addProperty("return_uri", "HPSSDK.processCardBack()");
-                obj2.addProperty("customer_id", "TEST_TOKEN_CUSTOMERID");
-                this.cardInit("Bearer "+ accessToken, obj2, result2 -> {
-                    String initId;
-                    Log.i("TOKEN CARDINIT", "result: " + result2);
-                    if(result2.has("code") && result2.get("code").getAsInt() == 1){
-                        initId = result2.get("initId").getAsString();
-                    } else {
-                        initId = "";
-                        Log.e("TOKEN CARDINIT ERROR:", "result: " + result2);
-                    }
-//                    if(initId.length() != 0) {
-//                        Log.i("TOKEN CARDFORM", "WEBVIEW INITID");
-//                        Intent webViewIntent = new Intent(this, WebViewActivity.class);
-//                        webViewIntent.putExtra("initId", initId);
-//                        startActivity(webViewIntent);
-//                    }
-                });
-            }
-        });
+    public void createCheckout(JsonObject obj, TokenCallbackInterface callback) {
+        tokenService.createCheckout(this.hps_token, obj, callback);
     }
 
-//
-//    public static void checkCheckout(TokenCallbackInterface callback) {
-//        tokenService.checkCheckout(callback);
-//    }
+    public void checkCheckout(String checkoutId, TokenCallbackInterface callback) {
+        tokenService.checkCheckout(this.hps_token, checkoutId, callback);
+    }
+
+    public void doPayment(JsonObject obj, TokenCallbackInterface callback) {
+        tokenService.doPayment(this.hps_token, obj, callback);
+    }
+
+    public void checkPayment(String paymentId, TokenCallbackInterface callback) {
+        tokenService.checkPayment(this.hps_token, paymentId, this.hps_entityid, callback);
+    }
 }

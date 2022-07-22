@@ -98,15 +98,27 @@ public class TokenService {
         functionCall(api.cardInit(token, obj), callback);
     }
 
-//    public void cardAdd(String cardInitId, TokenCallbackInterface callback) {
-//        functionCall(api.cardAdd(cardInitId), callback);
-//    }
-
     public void cardList(String token, String customerId, TokenCallbackInterface callback) {
         functionCall(api.cardList(token, customerId), callback);
     }
 
     public void cardRemove(String token, String cardId, TokenCallbackInterface callback) {
         functionCall(api.cardRemove(token, cardId), callback);
+    }
+
+    public void createCheckout(String merchantToken, JsonObject obj, TokenCallbackInterface callback) {
+        functionCall(api.createCheckout(merchantToken, obj), callback);
+    }
+
+    public void checkCheckout(String merchantToken, String checkoutId, TokenCallbackInterface callback) {
+        functionCall(api.checkCheckout(merchantToken, checkoutId), callback);
+    }
+
+    public void doPayment(String merchantToken, JsonObject obj, TokenCallbackInterface callback) {
+        functionCall(api.doPayment(merchantToken, obj), callback);
+    }
+
+    public void checkPayment(String merchantToken, String paymentId, String entityId, TokenCallbackInterface callback) {
+        functionCall(api.checkPayment(merchantToken, paymentId, entityId), callback);
     }
 }
