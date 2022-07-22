@@ -2,11 +2,15 @@ package mn.hipay.tokenlibrary.callback;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ListView;
 
 import com.google.gson.JsonObject;
 
+import mn.hipay.tokenlibrary.R;
+import mn.hipay.tokenlibrary.TokenMainActivity;
 import mn.hipay.tokenlibrary.api.TokenService;
 import mn.hipay.tokenlibrary.exception.HpsException;
+import mn.hipay.tokenlibrary.model.AdapterCardData;
 import mn.hipay.tokenlibrary.model.CardData;
 import mn.hipay.tokenlibrary.service.TokenHelper;
 
@@ -47,7 +51,7 @@ public class Worker {
                     Log.i("TOKEN CARDREMOVE", "result: " + result2);
                     if(result2.has("code") && result2.get("code").getAsInt() == 1){
                         Log.i("TOKEN CARDREMOVE SUCCES", "result: " + result2);
-                        callBack.onSuccess(result2.toString());
+                        callBack.onSuccess(result2.toString(), result2);
                     } else {
                         Log.e("TOKEN CARDREMOVE ERROR", "result: " + result2);
                         callBack.onFailure(new HpsException(HpsException.CARD_REMOVE_EXCEPTION, result2.toString()));
@@ -56,18 +60,6 @@ public class Worker {
                 });
             }
         });
-
-        String successMessage = "";
-        Throwable throwableError = new Exception("Some error");
-
-
-
-        if (this.callBack!= null) {
-            callBack.onSuccess(successMessage);
-        }
-        else {
-            callBack.onFailure(throwableError);
-        }
     }
 
     public void setCardAddListener(String customerId, CardListenerCallback  callBack) {
@@ -83,6 +75,7 @@ public class Worker {
             } else {
                 accessToken = "";
                 Log.e("TOKEN ACCESSTOKEN ERROR", "result: " + result);
+                callBack.onFailure(new HpsException(HpsException.ACCESS_TOKEN_EXCEPTION, result.toString()));
             }
             Log.i("TOKEN ACCESSTOKEN", accessToken);
             if(accessToken.length() != 0) {
@@ -95,9 +88,46 @@ public class Worker {
                     Log.i("TOKEN CARDINIT", "result: " + result2);
                     if(result2.has("code") && result2.get("code").getAsInt() == 1){
                         initId = result2.get("initId").getAsString();
+                        callBack.onSuccess(result2.toString(), result2);
                     } else {
                         initId = "";
                         Log.e("TOKEN CARDINIT ERROR:", "result: " + result2);
+                        callBack.onFailure(new HpsException(HpsException.CARD_ADD_INIT_EXCEPTION, result2.toString()));
+                    }
+                });
+            }
+        });
+    }
+
+    public void getCardListListener(String customerId, CardListenerCallback  callBack) {
+        this.callBack = callBack;
+        JsonObject obj = new JsonObject();
+        obj.addProperty("redirect_uri",baseVerifyUrl);
+        this.tokenHelper.accessTokenCreation(obj, result -> {
+            String accessToken = "";
+            Log.i("TOKEN ACCESSTOKEN", "result: " + result);
+            if(result.has("code") && result.get("code").getAsInt() == 1){
+                accessToken = result.get("access_token").getAsString();
+            } else {
+                accessToken = "";
+                Log.e("TOKEN ACCESSTOKEN ERROR", "result: " + result);
+                callBack.onFailure(new HpsException(HpsException.ACCESS_TOKEN_EXCEPTION, result.toString()));
+            }
+            Log.i("TOKEN ACCESSTOKEN", accessToken);
+            if(accessToken.length() != 0) {
+                JsonObject obj2 = new JsonObject();
+                this.tokenHelper.cardList("Bearer "+ accessToken, "TEST_TOKEN_CUSTOMERID", result2 -> {
+                    Log.i("TOKEN CARDLIST", "result: " + result2);
+                    if(result2.has("code") && result2.get("code").getAsInt() == 1){
+                        callBack.onSuccess(result2.toString(), result2);
+//                        if(result2.has("cards")){
+//                            for(int i=0; i< result2.getAsJsonArray("cards").size(); i++){
+//
+//                            }
+//                        }
+                    } else {
+                        Log.e("TOKEN CARDLIST ERROR:", "result: " + result2);
+                        callBack.onFailure(new HpsException(HpsException.CARD_LIST_EXCEPTION, result2.toString()));
                     }
                 });
             }
