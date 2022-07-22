@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 
 import mn.hipay.tokenlibrary.R;
@@ -68,7 +70,7 @@ public class AdapterCardData extends ArrayAdapter<CardData> {
                             Worker worker = new Worker(getContext());
                             worker.setCardRemoveListener(lCardData.get(position), new CardListenerCallback() {
                                 @Override
-                                public void onSuccess(String successMessage) {
+                                public void onSuccess(String successMessage, JsonObject obj) {
                                     Log.i("CARD_REMOVE_SUCCESS", successMessage);
                                     System.out.println("The event has been triggered successfully");
                                 }
